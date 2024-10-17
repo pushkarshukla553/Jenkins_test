@@ -12,6 +12,18 @@ pipeline {
                 }
             }
         }
+     stages {
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    // Use withCredentials to access Docker Hub credentials
+                    withCredentials([usernamePassword(credentialsId: 'dockerhubcred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        // Login to Docker Hub
+                        sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    }
+                }
+            }
+        }
         
         stage('Test') {
             steps {
